@@ -30,7 +30,7 @@ const routeConfig = [
   { path: "/expenses", text: "Expenses", icon: AttachMoney, component: Expenses, inNav: true, isPrivate: true },
   { path: "/settings", text: "Settings", icon: SettingsIcon, component: Settings, inNav: true, isPrivate: true },
   { path: "/login", text: "Login", icon: LoginIcon, component: Login, inNav: true, isPrivate: false },
-  { path: "/", component: Dashboard, inNav: false, isPrivate: true },
+  { path: "/dashboard", component: Dashboard, inNav: false, isPrivate: true },
 ];
 
 function App() {
