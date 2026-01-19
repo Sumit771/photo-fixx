@@ -42,25 +42,25 @@ const Summary = () => {
     .reduce((acc, expense) => acc + (expense.amount || 0), 0);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h2 className="text-lg font-bold text-gray-700">Income Generated</h2>
-        <p className="text-2xl font-bold text-gray-900">${incomeGenerated}</p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-emerald-200 transition-all hover:shadow-md">
+        <h2 className="text-xs sm:text-sm font-medium text-emerald-600 uppercase tracking-wider">Income Generated</h2>
+        <p className="text-2xl sm:text-3xl font-bold text-emerald-900 mt-2">₹{incomeGenerated.toLocaleString("en-IN")}</p>
       </div>
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h2 className="text-lg font-bold text-gray-700">Total Expenses</h2>
-        <p className="text-2xl font-bold text-gray-900">${totalExpenses}</p>
+      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-rose-200 transition-all hover:shadow-md">
+        <h2 className="text-xs sm:text-sm font-medium text-rose-600 uppercase tracking-wider">Total Expenses</h2>
+        <p className="text-2xl sm:text-3xl font-bold text-rose-900 mt-2">₹{totalExpenses.toLocaleString("en-IN")}</p>
       </div>
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h2 className="text-lg font-bold text-gray-700">Total Orders</h2>
-        <p className="text-2xl font-bold text-gray-900">{totalOrders}</p>
+      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-blue-200 transition-all hover:shadow-md">
+        <h2 className="text-xs sm:text-sm font-medium text-blue-600 uppercase tracking-wider">Total Orders</h2>
+        <p className="text-2xl sm:text-3xl font-bold text-blue-900 mt-2">{totalOrders}</p>
       </div>
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h2 className="text-lg font-bold text-gray-700">
-          Total Amount spent on Ads
+      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-amber-200 transition-all hover:shadow-md">
+        <h2 className="text-xs sm:text-sm font-medium text-amber-600 uppercase tracking-wider">
+          Ad Spend
         </h2>
-        <p className="text-2xl font-bold text-gray-900">
-          ${totalAmountSpentOnAds}
+        <p className="text-2xl sm:text-3xl font-bold text-amber-900 mt-2">
+          ₹{totalAmountSpentOnAds.toLocaleString("en-IN")}
         </p>
       </div>
     </div>

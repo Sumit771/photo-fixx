@@ -88,7 +88,11 @@ const ClientOrdersModal = ({
                                   order.date as unknown as Timestamp
                                 )
                                   .toDate()
-                                  .toLocaleDateString()}
+                                  .toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                  })}
                               </span>
                             </div>
                             <div className="flex items-center text-gray-600">

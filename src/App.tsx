@@ -3,7 +3,6 @@ import {
   Home,
   ListAlt,
   Login as LoginIcon,
-  Menu,
   Settings as SettingsIcon,
   Summarize,
   AttachMoney,
@@ -19,6 +18,7 @@ import Settings from "./pages/Settings";
 import PrivateRoute from "./components/PrivateRoute";
 import { useState } from "react";
 import Expenses from "./pages/Expenses";
+import BottomNavbar from './components/BottomNavbar';
 
 // I've refactored the routing and navigation to be data-driven.
 // This makes it easier to manage routes and navigation links.
@@ -28,22 +28,20 @@ const routeConfig = [
   { path: "/new-order", text: "New Order", icon: Add, component: NewOrder, inNav: true, isPrivate: true },
   { path: "/monthly-summary", text: "Monthly Summary", icon: Summarize, component: MonthlySummary, inNav: true, isPrivate: true },
   { path: "/expenses", text: "Expenses", icon: AttachMoney, component: Expenses, inNav: true, isPrivate: true },
-  { path: "/settings", text: "Settings", icon: SettingsIcon, component: Settings, inNav: true, isPrivate: true },
   { path: "/login", text: "Login", icon: LoginIcon, component: Login, inNav: true, isPrivate: false },
   { path: "/photo-fixx/dashboard", component: Dashboard, inNav: false, isPrivate: true },
 ];
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <Router>
       <div className="flex min-h-screen bg-gray-100 text-gray-900">
         <nav
-          className={`w-64 bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-white transition-all duration-300 ${sidebarOpen ? "block" : "hidden"
-            } md:block`}
+          className={`hidden md:block md:relative md:w-64 bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-white`}
         >
-          <h1 className="text-2xl font-bold">Photo Fixx</h1>
-          <ul className="mt-8 space-y-2">
+          <h1 className="text-2xl font-bold text-center">Photo Fixx</h1>
+          <ul className="mt-8 space-y-2 flex flex-col items-center justify-center">
             {routeConfig
               .filter((route) => route.inNav && route.icon && route.text)
               .map((route) => (
@@ -59,13 +57,7 @@ function App() {
               ))}
           </ul>
         </nav>
-        <main className="flex-1 p-4 md:p-8">
-          <button
-            className="md:hidden mb-4"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            <Menu />
-          </button>
+        <main className="flex-1 p-4 md:p-8 pb-16">
           <Routes>
             {routeConfig.map((route) => {
               const PageComponent = route.component;
@@ -82,6 +74,7 @@ function App() {
           </Routes>
         </main>
       </div>
+      <BottomNavbar routeConfig={routeConfig} />
     </Router>
   );
 }

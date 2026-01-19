@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PhotoFixx</string>
+    <string name="title_activity_main">PhotoFixx</string>
+    <string name="package_name">com.pf.photofixx</string>
+    <string name="custom_url_scheme">com.pf.photofixx</string>
+</resources>

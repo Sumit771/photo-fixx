@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import { db } from "../lib/firebase";
-import { collection, addDoc, Timestamp, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, Timestamp, onSnapshot, query, orderBy, limit } from "firebase/firestore";
 
 interface Customer {
   name: string;
   phone: string;
-  email: string;
 }
 
 const NewOrder = () => {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [account, setAccount] = useState<"PhotoFixx" | "Framilo">("PhotoFixx");
   const [photoType, setPhotoType] = useState<"Digital" | "Framed">("Digital");
   const [totalCharges, setTotalCharges] = useState<number | string>("");
   const [upfrontPaid, setUpfrontPaid] = useState<number | string>("");
@@ -21,6 +20,7 @@ const NewOrder = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [nextOrderNo, setNextOrderNo] = useState<number>(1);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "orders"), (snapshot) => {
@@ -33,7 +33,6 @@ const NewOrder = () => {
             customers[key] = {
               name: data.customerName,
               phone: data.phone || "",
-              email: data.email || "",
             };
           }
         }
@@ -51,7 +50,24 @@ const NewOrder = () => {
       ("0" + (today.getMonth() + 1)).slice(-2) +
       "-" +
       ("0" + today.getDate()).slice(-2);
-    setDate(date);
+  }, []);
+
+  useEffect(() => {
+    const fetchMaxOrderNo = async () => {
+      const ordersRef = collection(db, "orders");
+      const q = query(ordersRef, orderBy("orderNo", "desc"), limit(1));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const latestOrder = snapshot.docs[0].data();
+          setNextOrderNo((latestOrder.orderNo || 0) + 1);
+        } else {
+          setNextOrderNo(1);
+        }
+      });
+      return () => unsubscribe();
+    };
+
+    fetchMaxOrderNo();
   }, []);
 
   useEffect(() => {
@@ -64,10 +80,10 @@ const NewOrder = () => {
     setErrorMessage(null);
     try {
       await addDoc(collection(db, "orders"), {
-        orderNo: Math.floor(Math.random() * 10000),
+        orderNo: nextOrderNo,
         customerName,
         phone,
-        email,
+        account,
         photoType,
         totalCharges: Number(totalCharges) || 0,
         upfrontPaid: Number(upfrontPaid) || 0,
@@ -78,10 +94,12 @@ const NewOrder = () => {
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       });
+      // Increment nextOrderNo for the next order
+      setNextOrderNo(prev => prev + 1);
       // Optionally, reset the form or show a success message
       setCustomerName("");
       setPhone("");
-      setEmail("");
+      setAccount("PhotoFixx");
       setPhotoType("Digital");
       setTotalCharges("");
       setUpfrontPaid("");
@@ -121,13 +139,12 @@ const NewOrder = () => {
     if (customer) {
       setCustomerName(customer.name);
       setPhone(customer.phone);
-      setEmail(customer.email);
     }
     setSuggestions([]);
   };
 
   return (
-    <div>
+    <div className="max-w-full overflow-x-hidden p-4">
       <h1 className="text-2xl font-bold mb-4">New Order</h1>
       {successMessage && (
         <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
@@ -192,18 +209,19 @@ const NewOrder = () => {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="email"
+            htmlFor="account"
           >
-            Email
+            Account
           </label>
-          <input
+          <select
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 bg-white leading-tight focus:outline-none focus:shadow-outline"
-            id="email"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+            id="account"
+            value={account}
+            onChange={(e) => setAccount(e.target.value as "PhotoFixx" | "Framilo")}
+          >
+            <option>PhotoFixx</option>
+            <option>Framilo</option>
+          </select>
         </div>
         <div className="mb-4">
           <label

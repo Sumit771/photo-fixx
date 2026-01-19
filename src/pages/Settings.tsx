@@ -1,6 +1,6 @@
 const Settings = () => {
   return (
-    <div>
+    <div className="max-w-full overflow-x-hidden p-4">
       <h1 className="text-2xl font-bold mb-4 text-gray-900">Settings</h1>
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
